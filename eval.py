@@ -90,7 +90,7 @@ for scale in scales:
 			im_h_y = im_h_y[0,:,:]
 			# save im_h_y to path
 			head, tail = ntpath.split(image_name)
-			save_folder = osp.join(opt.dataset,'sc'+str(scale))
+			save_folder = osp.join(dataset_root,opt.dataset,'sc'+str(scale))
 			
 			if os.path.isdir(save_folder):
 				filename = osp.join(save_folder,tail)
