@@ -12,8 +12,8 @@ import ntpath
 
 parser = argparse.ArgumentParser(description="Pytorch DRRN Eval")
 parser.add_argument("--cuda", action="store_true", help="use cuda?")
-parser.add_argument("--model", type=str, default="model/model_epoch_1.pth", help="model path")
-parser.add_argument("--dataset", default="CASIA1_test", type=str, help="dataset name, Default: CASIA1_test")
+parser.add_argument("--model", type=str, default="model/model_epoch_28.pth", help="model path")
+parser.add_argument("--dataset", default="CASIA1", type=str, help="dataset name, Default: CASIA1")
 
 dataset_root = r"/vulcan/scratch/luyu/data/datasets"
 
