@@ -39,7 +39,11 @@ model = torch.load(opt.model)["model"].module
 
 scales = [2, 3, 4]
 
-image_list = glob.glob(osp.join(dataset_root, opt.dataset))
+image_path = osp.join(dataset_root, opt.dataset, img)
+
+image_list = glob.glob(image_path+"/*.*"))
+print("number of images to be scaled:", len(image_list))
+
 
 for scale in scales:
 	avg_psnr_predicted = 0.0
@@ -60,7 +64,7 @@ for scale in scales:
 # 			im_b_y = sio.loadmat(image_name)['im_b_y']
 
 # 			im_gt_y = im_gt_y.astype(float)
-			im_b_y = im_b_y.astype(float)      
+			im_b_y = im_b_y.astype(float)
 
 # 			psnr_bicubic = PSNR(im_gt_y, im_b_y,shave_border=scale)
 # 			avg_psnr_bicubic += psnr_bicubic
