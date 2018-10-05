@@ -5,7 +5,7 @@ import numpy as np
 import time, math, glob
 import scipy.io as sio
 from scipy import misc
-from PIL import image
+from PIL import Image
 import os.path as osp
 import os
 import ntpath
