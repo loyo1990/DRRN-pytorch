@@ -41,7 +41,7 @@ scales = [2, 3, 4]
 
 image_path = osp.join(dataset_root, opt.dataset, img)
 
-image_list = glob.glob(image_path+"/*.*"))
+image_list = glob.glob(image_path+"/*.*")
 print("number of images to be scaled:", len(image_list))
 
 
