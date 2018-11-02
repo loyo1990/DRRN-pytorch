@@ -40,7 +40,7 @@ if cuda and not torch.cuda.is_available():
 
 model = torch.load(opt.model)["model"].module
 
-scales = 3
+scales = [3]
 
 image_path = osp.join(dataset_root, opt.dataset, 'img')
 
