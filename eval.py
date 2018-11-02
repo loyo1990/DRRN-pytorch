@@ -57,6 +57,8 @@ for scale in scales:
 
 		im = Image.open(image_name)
 		ycbcr = im.convert('YCbCr')
+		
+		ycbcr = np.array(ycbcr)
 		im_b_y = ycbcr[:,:,0]
 
 
