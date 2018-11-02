@@ -37,9 +37,9 @@ if cuda and not torch.cuda.is_available():
 
 model = torch.load(opt.model)["model"].module
 
-scales = [2, 3, 4]
+scales = 3
 
-image_path = osp.join(dataset_root, opt.dataset, img)
+image_path = osp.join(dataset_root, opt.dataset, 'img')
 
 image_list = glob.glob(image_path+"/*.*")
 print("number of images to be scaled:", len(image_list))
@@ -49,60 +49,57 @@ for scale in scales:
 	avg_psnr_predicted = 0.0
 	avg_psnr_bicubic = 0.0
 	avg_elapsed_time = 0.0
-	count = 0.0
 	for image_name in image_list:
-		if str(scale) in image_name:
-			count += 1 
-			print("Processing ", image_name)
-			
-			im = Image.open(image_name)
-			ycbcr = im.convert('YCbCr')
-			im_b_y = ycbcr[:,:,0]
-			
-			
+		print("Processing ", image_name)
+
+		im = Image.open(image_name)
+		ycbcr = im.convert('YCbCr')
+		im_b_y = ycbcr[:,:,0]
+
+
 # 			im_gt_y = sio.loadmat(image_name)['im_gt_y']
 # 			im_b_y = sio.loadmat(image_name)['im_b_y']
 
 # 			im_gt_y = im_gt_y.astype(float)
-			im_b_y = im_b_y.astype(float)
+		im_b_y = im_b_y.astype(float)
 
 # 			psnr_bicubic = PSNR(im_gt_y, im_b_y,shave_border=scale)
 # 			avg_psnr_bicubic += psnr_bicubic
 
-			im_input = im_b_y/255.
+		im_input = im_b_y/255.
 
-			im_input = Variable(torch.from_numpy(im_input).float(), volatile=True).view(1, -1, im_input.shape[0], im_input.shape[1])
+		im_input = Variable(torch.from_numpy(im_input).float(), volatile=True).view(1, -1, im_input.shape[0], im_input.shape[1])
 
-			if cuda:
-				model = model.cuda()
-				im_input = im_input.cuda()
-			else:
-				model = model.cpu()
+		if cuda:
+			model = model.cuda()
+			im_input = im_input.cuda()
+		else:
+			model = model.cpu()
 
-			start_time = time.time()
-			HR = model(im_input)
-			elapsed_time = time.time() - start_time
-			avg_elapsed_time += elapsed_time
+		start_time = time.time()
+		HR = model(im_input)
+		elapsed_time = time.time() - start_time
+		avg_elapsed_time += elapsed_time
 
-			HR = HR.cpu()
+		HR = HR.cpu()
 
-			im_h_y = HR.data[0].numpy().astype(np.float32)
+		im_h_y = HR.data[0].numpy().astype(np.float32)
 
-			im_h_y = im_h_y*255.
-			im_h_y[im_h_y<0] = 0
-			im_h_y[im_h_y>255.] = 255.            
-			im_h_y = im_h_y[0,:,:]
-			# save im_h_y to path
-			head, tail = ntpath.split(image_name)
-			save_folder = osp.join(dataset_root,opt.dataset,'sc'+str(scale))
-			
-			if os.path.isdir(save_folder):
-				filename = osp.join(save_folder,tail)
-			else:
-				os.mkdir(save_folder)
-				filename = osp.join(save_folder,tail)
-				
-			misc.imsave(filename, im_h_y)
+		im_h_y = im_h_y*255.
+		im_h_y[im_h_y<0] = 0
+		im_h_y[im_h_y>255.] = 255.            
+		im_h_y = im_h_y[0,:,:]
+		# save im_h_y to path
+		head, tail = ntpath.split(image_name)
+		save_folder = osp.join(dataset_root,opt.dataset,'sc'+str(scale))
+
+		if os.path.isdir(save_folder):
+			filename = osp.join(save_folder,tail)
+		else:
+			os.mkdir(save_folder)
+			filename = osp.join(save_folder,tail)
+
+		misc.imsave(filename, im_h_y)
 
 # 			psnr_predicted = PSNR(im_gt_y, im_h_y,shave_border=scale)
 # 			avg_psnr_predicted += psnr_predicted
@@ -111,5 +108,5 @@ for scale in scales:
 # 	print("Dataset=", opt.dataset)
 # 	print("PSNR_predicted=", avg_psnr_predicted/count)
 # 	print("PSNR_bicubic=", avg_psnr_bicubic/count)
-	print("It takes average {}s for processing".format(avg_elapsed_time/count))
+print("It takes average {}s for processing".format(avg_elapsed_time/count))
 
