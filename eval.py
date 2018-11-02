@@ -9,6 +9,7 @@ from PIL import Image
 import os.path as osp
 import os
 import ntpath
+import pdb
 
 parser = argparse.ArgumentParser(description="Pytorch DRRN Eval")
 parser.add_argument("--cuda", action="store_true", help="use cuda?")
@@ -31,6 +32,8 @@ def PSNR(pred, gt, shave_border=0):
 
 opt = parser.parse_args()
 cuda = opt.cuda
+
+pdb.set_trace()
 
 if cuda and not torch.cuda.is_available():
 	raise Exception("No GPU found, please run without --cuda")
