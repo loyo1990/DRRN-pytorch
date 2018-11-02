@@ -33,8 +33,6 @@ def PSNR(pred, gt, shave_border=0):
 opt = parser.parse_args()
 cuda = opt.cuda
 
-pdb.set_trace()
-
 if cuda and not torch.cuda.is_available():
 	raise Exception("No GPU found, please run without --cuda")
 
